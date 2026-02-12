@@ -1,6 +1,6 @@
 ---
 title: "Visualize Data"
-author: "Your Name"
+author: "Dhruv Salian"
 format: gfm
 execute: 
   echo: true
@@ -24,6 +24,7 @@ Try your code again
 ```{r}
 #| label: setup
 #| include: false
+library(tidyverse)
 
 
 
@@ -39,6 +40,7 @@ Add a setup chunk that loads the tidyverse packages.
 ```{r}
 #| label: add-label-0
 head(mpg)
+
 ```
 
 
@@ -48,7 +50,8 @@ Run the code on the slide to make a graph. Pay strict attention to spelling, cap
 
 ```{r}
 #| label: add-label-1
-#add code
+ggplot(data = mpg)+
+  geom_point(mapping = aes(x = displ, y = hwy))
 ```
 
 
@@ -69,14 +72,20 @@ Make a histogram of the `hwy` variable from `mpg`. Hint: do not supply a y varia
 
 ```{r}
 #| label: add-label-3
-```
-
+ggplot(mpg) +
+  geom_histogram(aes(x = hwy),binwidth = 2)
+```                
 ## Your Turn 4
 
 Use the help page for `geom_histogram` to make the bins 2 units wide.
 
 ```{r}
 #| label: add-label-4
+ggplot(mpg) +
+  geom_histogram(aes(x = hwy),
+                 alpha=0.5,
+                 binwidth = 2,
+                 fill="blue")
 ```
 
 
@@ -88,7 +97,13 @@ Add `color`, `size`, `alpha`, and `shape` aesthetics to your graph. Experiment.
 #| label: add-label-5
 ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, 
-                           y = hwy))
+                           y = hwy,
+                           color=class))+
+  labs(x="Engine size Displacement",
+       y="Highway Mileage(mpg)",
+       color="Class of Vehicle",
+       Title="The bigger the engine the less mileage we get on highway")+
+         theme_light()
 ```
 
 ## Help Me
@@ -114,6 +129,13 @@ Make a bar chart `class` colored by `class`. Use the help page for `geom_bar` to
 
 ```{r}
 #| label: add-label-6
+ggplot(data = mpg) +
+  geom_bar(aes(x = class, fill=drv),
+           position=position_dodge())+
+  labs(x="class of Vehicles",
+       y="Number of Vehicles in Sample",
+       fill="type of Drive")+
+  theme_bw()
 ```
 
 ## Quiz
@@ -121,10 +143,14 @@ Make a bar chart `class` colored by `class`. Use the help page for `geom_bar` to
 What will this code do?
 
 ```{r}
-ggplot(mpg) + 
-  geom_point(aes(displ, hwy)) +
-  geom_smooth(aes(displ, hwy)) 
-#  ggsave("example.jpg")
+ggplot(mpg,aes(x=displ, y=hwy)) + 
+  geom_point(aes(color=class)) +
+  geom_smooth(color="black",
+              se= FALSE,
+              method="lm") 
+scale_color_viridis_d()
+
+ ggsave("example.jpg",width=6, height=4)
 ```
 
 
